@@ -8,10 +8,24 @@ module.exports = (grunt) ->
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks)
 
   grunt.initConfig
+    mocha_phantomjs:
+      all:
+        options:
+          urls: [
+            'http://localhost:8080/index.html'
+          ]
+
     connect:
       options:
         port: 8080
         hostname: 'localhost'
+      test:
+        options:
+          middleware: (connect) ->
+            return [
+              mountFolder(connect, 'test/')
+              mountFolder(connect, 'app/')
+            ]
       livereload:
         options:
           middleware: (connect) ->
@@ -21,19 +35,32 @@ module.exports = (grunt) ->
             ]
 
     watch:
-      options:
-        nospawn: true
-        livereload: true
+      test:
+        files: [
+          'test/*.html'
+          'test/spec/*.js'
+        ]
+        tasks: [
+          'mocha_phantomjs'
+        ]
 
       static:
         files: [
           'app/index.html'
           'app/js/*.js'
         ]
+        options:
+          livereload: true
 
   # Register tasks.
   grunt.registerTask 'develop', [
-    'connect'
+    'connect:livereload'
+    'watch'
+  ]
+
+  grunt.registerTask 'test', [
+    'connect:test'
+    'mocha_phantomjs'
     'watch'
   ]
 

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>TodoMVC Test - Backbone.js Ver.</title>
+<link rel="stylesheet" href="lib/mocha/mocha.css">
+<style>
+#todoapp{
+    display: none;
+}
+</style>
+</head>
+<body>
+<section id="todoapp">
+<header id="header">
+<h1>todos</h1>
+<input type="text" id="new-todo" placeholder="What needs to be done?" autofocus>
+</header>
+
+<section id="main">
+<input type="checkbox" name="toggle-all" id="toggle-all">
+<label for="toggle-all">Mark all as complete</label>
+<ul id="todo-list"></ul>
+</section>
+
+<footer id="footer"></footer>
+</section>
+
+<script type="text/template" id="item-template">
+<div class="view">
+<input type="checkbox" class="toggle" <%= completed ? "checked" : "" %>>
+<label><%- title %></label>
+<button class="destroy"></button>
+</div><!-- /.view -->
+<input class="edit" value="<%- title %>">
+</script>
+
+<script type="text/template" id="stats-template">
+<span id="todo-count"><strong><%= remaining %></strong> <%= remaining === 1 ? "item" : "items" %> left</span>
+<ul id="filters">
+<li><a href="#/" class="selected">All</a></li>
+<li><a href="#/active">Active</a></li>
+<li><a href="#/completed">Completed</a></li>
+</ul>
+<% if (completed) { %>
+<button id="clear-completed">Clear completed (<%= completed %>)</button>
+<% } %>
+</script>
+
+<div id="mocha"></div><!-- /#mocha -->
+
+<script src="bower_components/todomvc-common/base.js"></script>
+<script src="bower_components/jquery/jquery.js"></script>
+<script src="bower_components/underscore/underscore.js"></script>
+<script src="bower_components/backbone/backbone.js"></script>
+<script src="bower_components/backbone.localStorage/backbone.localStorage.js"></script>
+<script src="js/models/todo.js"></script>
+<script src="js/collections/todos.js"></script>
+<script src="js/views/todo-view.js"></script>
+<script src="js/views/app-view.js"></script>
+<script src="js/routers/router.js"></script>
+<script src="js/app.js"></script>
+
+<script src="lib/expect.js"></script>
+<script src="lib/mocha/mocha.js"></script>
+<script>mocha.setup('bdd')</script>
+<script src="spec/test.js"></script>
+<script>
+window.onload = function () {
+    if (window.mochaPhantomJS) {
+        mochaPhantomJS.run();
+    } else {
+        mocha.run();
+    }
+}
+</script>
+</body>
+</html>
